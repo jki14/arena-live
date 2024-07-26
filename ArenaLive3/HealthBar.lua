@@ -109,7 +109,7 @@ end
 function HealthBar:SetReverseFill (healthBar, addonName, frameType)
 		local database = ArenaLive:GetDBComponent(addonName, self.name, frameType);
 		local reverseFill = database.ReverseFill;
-		healthBar:SetReverseFill(reverseFill);
+		healthBar:SetReverseFill(reverseFill or false);
 end
 
 --[[ Method: UpdateHealth

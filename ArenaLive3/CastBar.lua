@@ -105,7 +105,7 @@ end
 function CastBar:SetReverseFill (castBar, addonName, frameType)
 	local database = ArenaLive:GetDBComponent(addonName, self.name, frameType);
 	local reverseFill = database.ReverseFill;
-	castBar:SetReverseFill(reverseFill);
+	castBar:SetReverseFill(reverseFill or false);
 end
 
 function CastBar:Update(unitFrame)

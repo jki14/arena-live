@@ -95,7 +95,7 @@ end
 function PowerBar:SetReverseFill (powerBar, addonName, frameType)
 		local database = ArenaLive:GetDBComponent(addonName, self.name, frameType);
 		local reverseFill = database.ReverseFill;
-		powerBar:SetReverseFill(reverseFill);
+		powerBar:SetReverseFill(reverseFill or false);
 end
 
 --[[ Method: Update
