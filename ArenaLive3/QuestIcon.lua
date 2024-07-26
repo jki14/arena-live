@@ -48,7 +48,8 @@ function QuestIcon:GetTexture (unitFrame)
 		return nil, 0, 1, 0, 1;
 	end
 
-	if ( UnitIsQuestBoss(unit) ) then
+    -- TODO: do we even want to fix this?
+	if ( false and UnitIsQuestBoss(unit) ) then
 		return "Interface\\TargetingFrame\\PortraitQuestBadge", 0, 1, 0, 1;
 	else
 		return nil, 0, 1, 0, 1;
@@ -62,7 +63,8 @@ function QuestIcon:GetShown (unitFrame)
 		return false;
 	end
 
-	if ( UnitIsQuestBoss(unit) ) then
+    -- TODO: do we even want to fix this?
+	if ( false and  UnitIsQuestBoss(unit) ) then
 		return true;
 	else
 		return false;

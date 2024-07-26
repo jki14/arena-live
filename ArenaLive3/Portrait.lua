@@ -98,8 +98,9 @@ function Portrait:Update(unitFrame)
 			portrait.texture:SetTexture("Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes");
 			portrait.texture:SetTexCoord(unpack(CLASS_ICON_TCOORDS[class]));
 			portrait.texture:Show();
-			
-		elseif ( unitType == "arena" and unitNumber ) then
+
+		-- FIXME: Fake spec detection?
+		elseif ( unitType == "arena" and unitNumber and 1 == 2 ) then
 			
 			-- Inside the arena we can get the class via GetArenaOpponentSpec() and GetSpecializationInfoByID() before the gates open.
 			local numOpps = GetNumArenaOpponentSpecs();

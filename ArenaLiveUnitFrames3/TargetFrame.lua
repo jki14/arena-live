@@ -31,7 +31,8 @@ function ALUF_TargetFrame:Initialise()
 		
 		-- Register Frame constituents:
 		self:RegisterHandler(_G[prefix.."Border"], "Border");
-		self:RegisterHandler(_G[prefix.."HealthBar"], "HealthBar", nil, _G[prefix.."HealthBarHealPredictionBar"], _G[prefix.."HealthBarAbsorbBar"], _G[prefix.."HealthBarAbsorbBarOverlay"], 32, _G[prefix.."HealthBarAbsorbBarFullHPIndicator"], nil, addonName, "TargetFrame");
+		--self:RegisterHandler(_G[prefix.."HealthBar"], "HealthBar", nil, _G[prefix.."HealthBarHealPredictionBar"], _G[prefix.."HealthBarAbsorbBar"], _G[prefix.."HealthBarAbsorbBarOverlay"], 32, _G[prefix.."HealthBarAbsorbBarFullHPIndicator"], nil, addonName, "TargetFrame");
+		self:RegisterHandler(_G[prefix.."HealthBar"], "HealthBar", nil, nil, _G[prefix.."HealthBarAbsorbBar"], _G[prefix.."HealthBarAbsorbBarOverlay"], 32, _G[prefix.."HealthBarAbsorbBarFullHPIndicator"], nil, addonName, "TargetFrame");
 		self:RegisterHandler(_G[prefix.."PowerBar"], "PowerBar", nil, addonName, "TargetFrame");
 		self:RegisterHandler(_G[prefix.."Icon1"], "Icon", 1, _G[prefix.."Icon1Texture"],_G[prefix.."Icon1Cooldown"], addonName);
 		self:RegisterHandler(_G[prefix.."Icon2"], "Icon", 2, _G[prefix.."Icon2Texture"], _G[prefix.."Icon2Cooldown"], addonName);
@@ -46,6 +47,7 @@ function ALUF_TargetFrame:Initialise()
 		self:RegisterHandler(_G[prefix.."LevelText"], "LevelText", nil , nil, "(%s)");
 		self:RegisterHandler(_G[prefix.."ReadyCheck"], "ReadyCheck");
 		self:RegisterHandler(_G[prefix.."DRTracker"], "DRTracker", nil, addonName, "TargetFrame");
+		self:RegisterHandler(_G[prefix.."ComboFrame"], "ComboFrame", nil, _G[prefix.."ComboFrameComboPoint1"], _G[prefix.."ComboFrameComboPoint2"], _G[prefix.."ComboFrameComboPoint3"], _G[prefix.."ComboFrameComboPoint4"], _G[prefix.."ComboFrameComboPoint5"]);
 		
 		local IconGroupHeader =  ArenaLive:GetHandler("IconGroupHeader");
 		IconGroupHeader:ConstructGroup("ALUF_TargetFrameIconGroup", "LEFT", 0, "TOPRIGHT", _G[prefix.."LevelText"], "TOPLEFT", 1, 2);
@@ -55,8 +57,7 @@ function ALUF_TargetFrame:Initialise()
 
 		self:RegisterHandler(_G[prefix.."PvPIcon"], "PvPIcon", nil, nil, nil, addonName, "TargetFrame", _G[prefix.."PvPIconTexture"]);
 		self:RegisterHandler(_G[prefix.."QuestIcon"], "QuestIcon", nil, nil, nil, addonName, "TargetFrame");
-		self:RegisterHandler(_G[prefix.."PetBattleIcon"], "PetBattleIcon", nil, nil, nil, addonName, "TargetFrame");
-		
+
 		-- Update Constituent positions and border colours:
 		ArenaLiveUnitFrames:UpdateFrameBorders(self);
 		self:UpdateElementPositions();

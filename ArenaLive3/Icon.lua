@@ -35,10 +35,11 @@ local Icon = ArenaLive:ConstructHandler("Icon", true, false);
 -- Set an indicator so that unit frames know that they have to nest all frames of this handler type into a superordinated table:
 Icon.multiple = true;
 
-Icon:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED");
+--Icon:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED");
 Icon:RegisterEvent("UNIT_FACTION");
 Icon:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED");
 Icon:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED_SPELL_DISPEL");
+Icon:RegisterEvent("ARENA_COOLDOWNS_UPDATE");
 Icon:RegisterEvent("PLAYER_ENTERING_WORLD");
 
 -- Table of Texture coordinates for the race/gender icons.
@@ -127,6 +128,36 @@ local RACE_GENDER_ICON_TCOORDS =
 -- Create table for spell cooldown of units:
 local cooldownCache = {};
 
+local sharedCds = {};
+for spellID, value in pairs(ArenaLive.spellDB.SharedCooldowns) do
+	local spellName = GetSpellInfo(spellID);
+	if spellName then
+		local spellNameTable = {};
+		for sharedSpellId, cd in pairs(value) do
+			local sharedSpellName = GetSpellInfo(sharedSpellId);
+			spellNameTable[sharedSpellName] = cd;
+		end
+		sharedCds[spellName] = spellNameTable;
+	end
+end
+
+local defensiveCDs = {};
+for class, cds in pairs(ArenaLive.spellDB.DefensiveCooldowns) do
+	local spellId, cooldown = unpack(cds);
+	local spellName = GetSpellInfo(spellId);
+	if spellName then
+		defensiveCDs[class] = { spellName, cooldown };
+	end
+end
+
+local interruptCDs = {};
+for class, cds in pairs(ArenaLive.spellDB.Interrupts) do
+	local spellId, cooldown = unpack(cds);
+	local spellName = GetSpellInfo(spellId);
+	if spellName then
+		interruptCDs[class] = { spellName, cooldown };
+	end
+end
 
 --[[
 ****************************************
@@ -241,6 +272,7 @@ function Icon:UpdateSingleIcon(frame, iconID)
 	
 	-- Set up spell info according to type:
 	icon.spellID, icon.duration = Icon:GetSpellInfo(frame, iconType);
+	icon.spellName = GetSpellInfo(icon.spellID);
 	
 	-- Set texture according to iconType:
 	Icon:SetTexture(frame, icon, iconType);
@@ -278,8 +310,6 @@ function Icon:GetSpellInfo(unitFrame, iconType)
 			end
 		elseif ( iconType == "interrupt" and ArenaLive.spellDB.Interrupts[class]) then
 				return unpack(ArenaLive.spellDB.Interrupts[class]);
-		elseif ( iconType == "dispel" and ArenaLive.spellDB.Dispels[class] ) then
-			return unpack(ArenaLive.spellDB.Dispels[class]);
 		elseif ( iconType == "defensiveCD" and class ) then
 			local guid = UnitGUID(unit);
 			if ( class == "DRUID" or class == "PRIEST" or class == "SHAMAN" or class == "WARRIOR" ) then
@@ -317,9 +347,9 @@ function Icon:GetCooldown(frame, icon)
 		local endTime;
 		
 		local spellID, duration, endTime;
-		if ( cooldownCache[guid][icon.spellID] ) then
+		if ( cooldownCache[guid][icon.spellName] ) then
 			duration = icon.duration;
-			endTime = cooldownCache[guid][icon.spellID];
+			endTime = cooldownCache[guid][icon.spellName];
 		end
 		
 		-- Return the match, if we have one:
@@ -330,7 +360,7 @@ function Icon:GetCooldown(frame, icon)
 				return startTime, duration;
 			else
 				-- Reset cache entry as the CD has run out already:
-				Icon:RemoveCooldown(guid, icon.spellID)		
+				Icon:RemoveCooldown(guid, icon.spellName)
 			end
 		end
 	end
@@ -393,7 +423,8 @@ function Icon:SetTexture(frame, icon, iconType)
 		end
 		
 		return;
-	elseif ( iconType == "specialisation" ) then
+    -- FIXME spec fake???
+	elseif ( iconType == "specialisation" and 1 == 2 ) then
 		--[[ Currently it is only possible to retrieve talent spec for "arena" and "player" unitIDs.
 			 For other unitIDs we would need to query the server via an inspect, which isn't very efficient. ]]
 		local spellIcon;
@@ -413,7 +444,7 @@ function Icon:SetTexture(frame, icon, iconType)
 			
 		elseif ( unitType == "arena" ) then
 			-- Retrieve arena opponent data:
-			local numOpps = GetNumArenaOpponentSpecs();
+			local numOpps = GetNumArenaOpponents();
 			local _, instanceType = IsInInstance();
 			
 			if ( numOpps and unitNumber and unitNumber <= numOpps ) then
@@ -477,16 +508,22 @@ end
 
 function Icon:AddCooldown(guid, spellID, duration)
 
+	local spellName = GetSpellInfo(spellID)
+
 	-- Create an entry for this guid, if there is none.
 	if ( not cooldownCache[guid] ) then
 		cooldownCache[guid] = {};
-	end	
+	end
 
-	local currentExpire = cooldownCache[guid][spellID];
+	if not duration or type(duration) == "string" then
+		print("missing cooldown duration for " .. spellName .. "  " .. spellID)
+	end
+
+	local currentExpire = cooldownCache[guid][spellName];
 	local expires = GetTime() + duration;
 		
 	if ( not currentExpire or currentExpire < expires ) then
-		cooldownCache[guid][spellID] = expires;
+		cooldownCache[guid][spellName] = expires;
 		return true;
 	else
 		return false;
@@ -494,8 +531,10 @@ function Icon:AddCooldown(guid, spellID, duration)
 end
 
 function Icon:RemoveCooldown(guid, spellID)
-	if ( cooldownCache[guid] and cooldownCache[guid][spellID] ) then
-		cooldownCache[guid][spellID] = nil;
+	local spellName = GetSpellInfo(spellID)
+
+	if ( cooldownCache[guid] and cooldownCache[guid][spellName] ) then
+		cooldownCache[guid][spellName] = nil;
 		if ( not next(cooldownCache[guid]) ) then
 			cooldownCache[guid] = nil;
 		end
@@ -523,14 +562,15 @@ function Icon:UpdateCooldownCache (event, spellID, unit, guid)
 		guid = UnitGUID(unit);
 		local _, class = UnitClass(unit);
 		local _, race = UnitRace(unit);
+		local spellName = GetSpellInfo(spellID);
 		
 		-- Get Trinket spellID and -CD:
 		local trinketID, trinketCD = unpack(ArenaLive.spellDB.Trinket);
 			
 		-- Get interrupt spellID and -CD:
-		local interruptID, interruptCD;
-		if ( ArenaLive.spellDB.Interrupts[class] ) then
-			interruptID, interruptCD = unpack(ArenaLive.spellDB.Interrupts[class]);
+		local interruptSpellName, interruptCD;
+		if ( interruptCDs[class] ) then
+			interruptSpellName, interruptCD = unpack(interruptCDs[class]);
 		end
 			
 		-- Get racial spellID and -CD:
@@ -543,13 +583,13 @@ function Icon:UpdateCooldownCache (event, spellID, unit, guid)
 			
 		-- Set cooldown if necessary:
 		if ( spellID == trinketID ) then
-				wasCacheUpdated = Icon:AddCooldown(guid, spellID, trinketCD);
-		elseif ( interruptID and spellID == interruptID ) then
+			wasCacheUpdated = Icon:AddCooldown(guid, spellID, trinketCD);
+		elseif ( spellName and interruptSpellName and spellName == interruptSpellName ) then
 			wasCacheUpdated = Icon:AddCooldown(guid, spellID, interruptCD);
 		elseif ( spellID == racialID ) then
 			wasCacheUpdated = Icon:AddCooldown(guid, spellID, racialCD);
-		elseif ( class and ArenaLive.spellDB.DefensiveCooldowns[class][spellID] ) then
-			wasCacheUpdated = Icon:AddCooldown(guid, spellID, ArenaLive.spellDB.DefensiveCooldowns[class][spellID]);
+		elseif ( class and spellName and defensiveCDs[class] and defensiveCDs[class][spellName] ) then
+			wasCacheUpdated = Icon:AddCooldown(guid, spellID, defensiveCDs[class][spellName]);
 		end
 		
 		-- Check if the spell is a cooldown resetter:
@@ -563,28 +603,15 @@ function Icon:UpdateCooldownCache (event, spellID, unit, guid)
 		end			
 		
 		-- Check for shared Cooldowns:
-		if ( type(ArenaLive.spellDB.SharedCooldowns[spellID]) == "table" ) then
-			for sharedID, sharedCD in pairs(ArenaLive.spellDB.SharedCooldowns[spellID]) do
+		if ( type(sharedCds[spellName]) == "table" ) then
+			for sharedID, sharedCD in pairs(sharedCds[spellName]) do
 				local wasEntrySet = Icon:AddCooldown(guid, sharedID, sharedCD);
 				if ( wasEntrySet and not wasCacheUpdated ) then
 					wasCacheUpdated = true;
 				end
 			end
-		end		
-		
-	elseif ( event == "COMBAT_LOG_EVENT_UNFILTERED_SPELL_DISPEL" and guid ) then
-	
-		-- GetPlayerInfoByGUID only returns data for players. This means that if class is nil we can assume that the guid is not a player
-		local _, class = GetPlayerInfoByGUID(guid);
-		if ( not class or not ArenaLive.spellDB.Dispels[class] ) then
-			return;
 		end
 
-		local dispelID, dispelCD = unpack(ArenaLive.spellDB.Dispels[class]);
-		if ( spellID == dispelID ) then
-			wasCacheUpdated = Icon:AddCooldown(guid, spellID, dispelCD);
-		end
-	
 	end
 	
 	-- Update affected frames if the cache was updated:
@@ -625,7 +652,7 @@ function Icon:OnEvent(event, ...)
 	elseif ( event == "UNIT_SPELLCAST_SUCCEEDED" ) then
 		local unit = select(1, ...);
 		unit = ArenaLive:GetPetOwnerUnit(unit);
-		local spellID = select(5, ...);
+		local spellID = select(3, ...);
 		local guid = UnitGUID(unit);
 
 		-- Update cooldown cache:
@@ -639,21 +666,16 @@ function Icon:OnEvent(event, ...)
 		
 
 	elseif ( event == "COMBAT_LOG_EVENT_UNFILTERED_SPELL_INTERRUPT" ) then
-		--[[ Bugfix for Ticket 41: Mages get their Counter Spell cooldown reduced by 4 sec. whenever they successfully interrupt someone,
-			 if they have the 2 piece set bonus of the PvP-Set. So always reduce the cooldown on a successful counter spell by 4 sec to make
-			 sure that always the lowest possible cooldown is shown. 
-			 UPDATE: This set bonus was removed in WoD.
-			local guid = select(4, ...);
-			local spellID = select(12, ...);
-			if ( guid and spellID and spellID == ArenaLive.spellDB.Interrupts.MAGE[1] and cooldownCache[guid] and cooldownCache[guid][spellID] ) then
-				cooldownCache[guid][spellID] = cooldownCache[guid][spellID] - 4;
-				if ( ArenaLive:IsGUIDInUnitFrameCache(guid) ) then
-					for id, isRegistered in ArenaLive:GetAffectedUnitFramesByGUID(guid) do
-						local frame = ArenaLive:GetUnitFrameByID(id);
-						Icon:Update(frame);
-					end
-				end
-			end]]
+
+	elseif ( event == "ARENA_COOLDOWNS_UPDATE" ) then
+		local unit = select(1, ...);
+		unit = ArenaLive:GetPetOwnerUnit(unit);
+		local guid = UnitGUID(unit);
+		local spellID, itemID, startTime, duration = C_PvP.GetArenaCrowdControlInfo(unit);
+		if( spellID ) then
+			Icon:UpdateCooldownCache("UNIT_SPELLCAST_SUCCEEDED", spellID, unit, guid);
+		end
+
 	elseif ( event == "PLAYER_ENTERING_WORLD" ) then
 		-- Wipe the cooldown cache when entering the arena, because all cooldowns will be resetted.
 		local _, instanceType = IsInInstance();

@@ -46,7 +46,6 @@ function ALUF_PlayerFrame:Initialise()
 		self:RegisterHandler(_G[prefix.."LevelText"], "LevelText", nil , nil, "(%s)");
 		self:RegisterHandler(_G[prefix.."ReadyCheck"], "ReadyCheck");
 		self:RegisterHandler(_G[prefix.."DRTracker"], "DRTracker", nil, addonName, "PlayerFrame");
-		self:RegisterHandler(_G[prefix.."ComboFrame"], "ComboFrame", nil, _G[prefix.."ComboFrameComboPoint1"], _G[prefix.."ComboFrameComboPoint2"], _G[prefix.."ComboFrameComboPoint3"], _G[prefix.."ComboFrameComboPoint4"], _G[prefix.."ComboFrameComboPoint5"]);
 		
 		local IconGroupHeader =  ArenaLive:GetHandler("IconGroupHeader");
 		IconGroupHeader:ConstructGroup("ALUF_PlayerFrameIconGroup", "RIGHT", 0, "TOPLEFT", _G[prefix.."LevelText"], "TOPRIGHT", 1, 2);
@@ -86,34 +85,22 @@ function ALUF_PlayerFrame:OnEnable()
 	-- For now we use the Blizzard AltPowerBars and attach them to AL's PlayerFrame:
 	local _, class = UnitClass("player");	
 	if ( class == "WARLOCK" ) then
-		WarlockPowerFrame:SetParent(ALUF_PlayerFrame);
-		WarlockPowerFrame:ClearAllPoints();
-		WarlockPowerFrame:SetPoint("TOP", ALUF_PlayerFrame, "BOTTOM", 48, -2 );
 	elseif ( class == "SHAMAN" ) then
 		TotemFrame:SetParent(ALUF_PlayerFrame);
 		TotemFrame:ClearAllPoints();
 		TotemFrame:SetPoint("TOP", ALUF_PlayerFrame, "BOTTOM", 0, 4 );
 	elseif ( class == "DRUID" ) then
-		EclipseBarFrame:SetParent(ALUF_PlayerFrame);
-		EclipseBarFrame:ClearAllPoints();
-		EclipseBarFrame:SetPoint("TOP", ALUF_PlayerFrame, "BOTTOM", 50, 3 );
 		-- Resto Druid Mushroom Display
 		TotemFrame:SetParent(ALUF_PlayerFrame);
 		TotemFrame:ClearAllPoints();
 		TotemFrame:SetPoint("TOPLEFT", ALUF_PlayerFrame, "BOTTOMLEFT", 0, 0 );
 		hooksecurefunc("TotemFrame_Update", UpdateTotemFramePosition);
 	elseif ( class == "PALADIN" ) then
-		PaladinPowerBarFrame:SetParent(ALUF_PlayerFrame);
-		PaladinPowerBarFrame:ClearAllPoints();
-		PaladinPowerBarFrame:SetPoint("TOP", ALUF_PlayerFrame, "BOTTOM", 0, 2 );
 	elseif ( class == "DEATHKNIGHT" ) then
 		RuneFrame:SetParent(ALUF_PlayerFrame);
 		RuneFrame:ClearAllPoints();
 		RuneFrame:SetPoint("TOP", ALUF_PlayerFrame, "BOTTOM", 52, -7 );
 	elseif ( class == "PRIEST" ) then
-		PriestBarFrame:SetParent(ALUF_PlayerFrame);
-		PriestBarFrame:ClearAllPoints();
-		PriestBarFrame:SetPoint("TOP", ALUF_PlayerFrame, "BOTTOM", 50, 0 );
 	elseif ( class == "MONK" ) then
 		MonkHarmonyBarFrame:SetParent(ALUF_PlayerFrame);
 		MonkHarmonyBarFrame:ClearAllPoints();

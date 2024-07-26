@@ -89,7 +89,6 @@
 	<Script File="PartyHeader.lua" />
 	<Script File="PowerBarText.lua" />
 	<Script File="PowerBar.lua" />
-	<Script File="StatusBarText.lua" />
 	<Include File="ArenaHeader.xml" />
 	<Include File="Icon.xml" />
 	<Include File="Portrait.xml" />
@@ -103,7 +102,6 @@
 	<Script File="LeaderIcon.lua" />
 	<Script File="MasterLooterIcon.lua" />
 	<Script File="MultiGroupIcon.lua" />
-	<Script File="PetBattleIcon.lua" />
 	<Script File="PvPIcon.lua" />
 	<Script File="QuestIcon.lua" />
 	<Script File="RaidIcon.lua" />
@@ -114,5 +112,6 @@
 	<Script File="TargetIndicator.lua" />
 	<Script File="ThreatIndicator.lua" />
 	<Script File="VoiceFrame.lua" />
+	<Script File="localisation_zhCN.lua" />
 	
 </Ui>

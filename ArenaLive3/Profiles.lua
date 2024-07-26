@@ -242,7 +242,7 @@ end
 
 local info = {};
 local function ActiveProfileDropDown_OnClick(button)
-	local dropDown = UIDROPDOWNMENU_OPEN_MENU;
+	local dropDown = UIDropDownMenu_GetCurrentDropDown();
 	UIDropDownMenu_SetText(dropDown, button:GetText());
 	Profiles:SetActiveProfile(dropDown.addon, button.value);
 end
@@ -287,7 +287,7 @@ function Profiles:ConstructActiveProfileDropDown(addonName, frameData)
 end
 
 local function CopyProfileDropDown_OnClick(button)
-	local dropDown = UIDROPDOWNMENU_OPEN_MENU;
+	local dropDown = UIDropDownMenu_GetCurrentDropDown();
 	local addon = ArenaLive.addons[dropDown.addon];
 	local database = addon.database;	
 	Profiles:CopyProfile(dropDown.addon, button.value, database.ActiveProfile);

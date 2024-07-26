@@ -30,7 +30,8 @@ local addonName, L = ...;
 **************************************************
 ]]--
 local ComboFrame = ArenaLive:ConstructHandler("ComboFrame", true, true);
-ComboFrame:RegisterEvent("UNIT_COMBO_POINTS");
+ComboFrame:RegisterEvent("UNIT_POWER_FREQUENT");
+ComboFrame:RegisterEvent("UNIT_MAXPOWER");
 
 local COMBO_POINT_FADEIN = 0.3;
 local fadingComboPoints = {};
@@ -72,7 +73,7 @@ function ComboFrame:Update(unitFrame)
 		return;
 	end
 
-	local comboPoints = GetComboPoints(unit);
+	local comboPoints = GetComboPoints("player", unit);
 	if ( comboPoints > 0 ) then
 		if ( not comboFrame:IsShown() ) then
 			comboFrame:Show();
@@ -127,8 +128,9 @@ function ComboFrame:ResetSingle(comboPoint)
 end
 
 function ComboFrame:OnEvent(event, ...)
-	local unit = ...;
-	if ( event == "UNIT_COMBO_POINTS" and unit == "player" ) then
+	local unit, type = ...;
+
+	if ( unit == "player" and type == "COMBO_POINTS" ) then
 		for id, unitFrame in ArenaLive:GetAllUnitFrames() do
 			if ( unitFrame[self.name] ) then
 				ComboFrame:Update(unitFrame);

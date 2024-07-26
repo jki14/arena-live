@@ -44,7 +44,7 @@ local headersToUpdate = {};
 ArenaHeader:RegisterEvent("PLAYER_REGEN_ENABLED");
 ArenaHeader:RegisterEvent("PLAYER_ENTERING_WORLD");
 ArenaHeader:RegisterEvent("ARENA_OPPONENT_UPDATE");
-ArenaHeader:RegisterEvent("ARENA_PREP_OPPONENT_SPECIALIZATIONS");
+--ArenaHeader:RegisterEvent("ARENA_PREP_OPPONENT_SPECIALIZATIONS");
 
 --Create a base class for this handler. All objects of the type UnitFrame will inherit functions from this one:
 local ArenaHeaderClass = {};
@@ -259,6 +259,9 @@ function ArenaHeader:OnEvent(event, ...)
 			if ( header.enabled ) then
 				local unitNumber = tonumber(string.match(unit, "^[a-z]+([0-9]+)$"));
 				local frame = header["Frame"..unitNumber];
+
+				-- FIXME: there are some bugged events for arena6?
+				if not frame then return end
 				
 				if ( header:GetAttribute("numopponents") < numOpponents ) then
 					header:UpdateNumOpponents();
@@ -321,6 +324,7 @@ function ArenaHeaderClass:Enable()
 	if ( type(self.OnEnable) == "function" ) then
 		self:OnEnable();
 	end
+
 end
 
 function ArenaHeaderClass:Disable()
@@ -348,6 +352,28 @@ function ArenaHeaderClass:Toggle()
 		self:Enable();
 	else
 		self:Disable();
+	end
+
+	-- if arena frames are enabled, we're hiding default arena UI
+	LoadAddOn("Blizzard_ArenaUI")
+	for i=1, 5 do
+		if _G["ArenaEnemyFrame" .. i] then
+			_G["ArenaEnemyFrame" .. i]:HookScript("OnShow", function(frame)
+				if(enabled) then
+					frame:SetAlpha(0);
+					frame:Hide();
+				end
+			end)
+		end
+
+		if(_G["ArenaEnemyFrame" .. i .. "PetFrame"]) then
+			_G["ArenaEnemyFrame" .. i .. "PetFrame"]:HookScript("OnShow", function(frame)
+				if(enabled) then
+					frame:SetAlpha(0);
+					frame:Hide();
+				end
+			end)
+		end
 	end
 end
 
@@ -400,10 +426,7 @@ end
 
 function ArenaHeaderClass:UpdateNumOpponents()
 	if ( not InCombatLockdown() ) then
-		local numOpponents = GetNumArenaOpponentSpecs() or 0;
-		if ( numOpponents == 0 ) then
-			numOpponents = GetNumArenaOpponents() or 0;
-		end
+		local numOpponents = GetNumArenaOpponents() or 0;
 
 		self:SetAttribute("numopponents", numOpponents);
 		self.updateNumOpponents = nil;
@@ -493,7 +516,7 @@ function ArenaHeaderClass:UnlockFrame(frameID)
 		return;
 	end
 	local frame = self["Frame"..frameID];
-	
+
 	if ( frame.HealthBar ) then
 		frame.HealthBar.lockValues = nil;
 		frame.HealthBar.lockColour = nil;

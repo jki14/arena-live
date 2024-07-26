@@ -36,9 +36,9 @@ local HealthBarText = ArenaLive:GetHandler("HealthBarText");
 HealthBar:RegisterEvent("UNIT_HEALTH");
 HealthBar:RegisterEvent("UNIT_FACTION");
 HealthBar:RegisterEvent("UNIT_MAXHEALTH");
-HealthBar:RegisterEvent("UNIT_ABSORB_AMOUNT_CHANGED");
-HealthBar:RegisterEvent("UNIT_HEAL_ABSORB_AMOUNT_CHANGED");
-HealthBar:RegisterEvent("UNIT_HEAL_PREDICTION");
+--HealthBar:RegisterEvent("UNIT_ABSORB_AMOUNT_CHANGED");
+--HealthBar:RegisterEvent("UNIT_HEAL_ABSORB_AMOUNT_CHANGED");
+--HealthBar:RegisterEvent("UNIT_HEAL_PREDICTION");
 
 -- Legit units for frequent updates with their current HP.
 local frequentUpdates = 
@@ -193,7 +193,8 @@ function HealthBar:UpdateAbsorb (unitFrame)
 	local minValue, maxValue = healthBar:GetMinMaxValues();
 	local maxHealth = UnitHealthMax(unit);
 	local currHealth = healthBar.currValue;
-	local absorb = UnitGetTotalAbsorbs(unit) or 0;
+	-- FIXME: fake absorb?
+	local absorb = --[[UnitGetTotalAbsorbs(unit) or]] 0;
 
 	-- If max health is smaller than health + absorb, set max value of the healthbar to health + absorb.
 	if ( currHealth + absorb > maxHealth ) then
@@ -283,7 +284,9 @@ function HealthBar:UpdateHealPrediction (unitFrame)
 	
 	local maxHealth = UnitHealthMax(unit);
 	local currHealth = healthBar.currValue;
-	local predictedHeal = UnitGetIncomingHeals(unit) or 0;
+	-- FIXME fake heals???
+	local predictedHeal = 0;
+	--local predictedHeal = UnitGetIncomingHeals(unit) or 0;
 	if ( maxHealth <= 0 ) then
 		return;
 	end

@@ -43,7 +43,9 @@ local frequentUpdates =
 	
 -- Register the handler for all needed events.
 PowerBar:RegisterEvent("UNIT_DISPLAYPOWER");
-PowerBar:RegisterEvent("UNIT_POWER");
+--PowerBar:RegisterEvent("UNIT_POWER");
+PowerBar:RegisterEvent("UNIT_MANA");
+PowerBar:RegisterEvent("UNIT_POWER_FREQUENT");
 PowerBar:RegisterEvent("UNIT_MAXPOWER");
 
 
@@ -218,7 +220,7 @@ end
 ]]--
 function PowerBar:OnEvent (event, ...)
 	local unit = ...;
-	if ( event == "UNIT_POWER" ) then
+	if ( event == "UNIT_POWER_FREQUENT" or event == "UNIT_MANA" ) then
 		-- Filter units that are updated by the OnUpdate script:
 		if ( not frequentUpdates[unit] ) then
 			if ( ArenaLive:IsUnitInUnitFrameCache(unit) ) then

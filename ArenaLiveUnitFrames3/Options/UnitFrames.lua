@@ -33,7 +33,7 @@ local PageClass = {};
 
 local info = {};
 local function frameGroupDropDown_OnClick(button)
-	local dropDown = UIDROPDOWNMENU_OPEN_MENU;
+	local dropDown = UIDropDownMenu_GetCurrentDropDown();
 	UIDropDownMenu_SetText(dropDown, button:GetText());
 	UIDropDownMenu_SetText(ALUF_UnitFrameOptionsHandlerDropDown, L["UnitFrame"]);
 	ALUF_UnitFrameOptions:UpdateActiveFrameGroup(button.value);
@@ -55,7 +55,7 @@ local function frameGroupDropDown_Refresh(dropDown, level, menuList)
 end
 
 local function handlerDropDown_OnClick(button)
-	local dropDown = UIDROPDOWNMENU_OPEN_MENU;
+	local dropDown = UIDropDownMenu_GetCurrentDropDown();
 	UIDropDownMenu_SetText(dropDown, button:GetText());
 	
 	ALUF_UnitFrameOptions:UpdateActiveHandler(button.value);

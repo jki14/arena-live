@@ -49,7 +49,9 @@ function RoleIcon:GetTexture (unitFrame)
 		return nil, 0, 1, 0, 1;
 	end
 
-	local role = UnitGroupRolesAssigned(unit);
+    -- FIXME: Fake role?
+    local role = "FAKE";
+	--local role = UnitGroupRolesAssigned(unit);
 	if ( role == "TANK" or role == "HEALER" or role == "DAMAGER") then
 		return "Interface\\LFGFrame\\UI-LFG-ICON-PORTRAITROLES", GetTexCoordsForRoleSmallCircle(role);
 	else
@@ -65,7 +67,9 @@ function RoleIcon:GetShown (unitFrame)
 		return false;
 	end
 
-	local role = UnitGroupRolesAssigned(unit);
+	-- FIXME: Fake role?
+    local role = "FAKE";
+    --local role = UnitGroupRolesAssigned(unit);
 	if ( role == "TANK" or role == "HEALER" or role == "DAMAGER") then
 		return true;
 	else

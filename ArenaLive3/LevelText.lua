@@ -78,8 +78,6 @@ function LevelText:Update (unitFrame)
 		level = ArenaLive.testModeValues[unitFrame.test]["level"];
 	elseif ( UnitIsCorpse(unit) ) then
 		level = "??";
-	elseif ( UnitIsWildBattlePet(unit) or UnitIsBattlePetCompanion(unit) ) then
-		level = UnitBattlePetLevel(unit);
 	else
 		level = UnitLevel(unit);
 		if ( level <= 0 ) then
@@ -91,7 +89,7 @@ function LevelText:Update (unitFrame)
 	-- Set the colour for the level text according to the level difference:
 	if ( level == "??" ) then
 		red, green, blue = 1, 0, 0;
-	elseif ( UnitCanAttack("player", unit) and not UnitIsWildBattlePet(unit) and not UnitIsBattlePetCompanion(unit) ) then
+	elseif ( UnitCanAttack("player", unit) ) then
 		colour =  GetQuestDifficultyColor(level);
 		red, green, blue = colour.r, colour.g, colour.b;
 	else

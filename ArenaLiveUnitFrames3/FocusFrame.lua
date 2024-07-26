@@ -45,6 +45,7 @@ function ALUF_FocusFrame:Initialise()
 		self:RegisterHandler(_G[prefix.."LevelText"], "LevelText", nil , nil, "(%s)");
 		self:RegisterHandler(_G[prefix.."ReadyCheck"], "ReadyCheck");
 		self:RegisterHandler(_G[prefix.."DRTracker"], "DRTracker", nil, addonName, "FocusFrame");
+		self:RegisterHandler(_G[prefix.."ComboFrame"], "ComboFrame", nil, _G[prefix.."ComboFrameComboPoint1"], _G[prefix.."ComboFrameComboPoint2"], _G[prefix.."ComboFrameComboPoint3"], _G[prefix.."ComboFrameComboPoint4"], _G[prefix.."ComboFrameComboPoint5"]);
 		
 		local IconGroupHeader =  ArenaLive:GetHandler("IconGroupHeader");
 		IconGroupHeader:ConstructGroup("ALUF_FocusFrameIconGroup", "LEFT", 0, "TOPRIGHT", _G[prefix.."LevelText"], "TOPLEFT", 1, 2);

@@ -43,7 +43,6 @@ L["LevelText"] = "Level";
 L["MasterLooterIcon"] = "Master Looter Icon";
 L["MultiGroupIcon"] = "Multigroup Icon";
 L["NameText"] = "Name";
-L["PetBattleIcon"] = "Pet Battle Icon";
 L["Portrait"] = "Portrait";
 L["PowerBar"] = "Powerbar";
 L["PowerBarText"] = "Powerbar Text";

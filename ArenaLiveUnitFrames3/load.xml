@@ -28,6 +28,7 @@
 	<Script File="localisation_deDE.lua" />
 	<Script File="localisation_esES.lua" />
 	<Script File="localisation_koKR.lua" />
+	<Script File="localisation_zhCN.lua" />
 	
 	<Script File="load.lua" />
 	<Script File="Positioning.lua" />

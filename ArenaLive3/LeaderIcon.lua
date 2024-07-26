@@ -50,11 +50,7 @@ function LeaderIcon:GetTexture (unitFrame)
 	end
 
 	if ( UnitIsGroupLeader(unit) ) then
-		if ( HasLFGRestrictions() ) then
-			return "Interface\\LFGFrame\\UI-LFG-ICON-PORTRAITROLES", 0, 0.296875, 0.015625, 0.3125;
-		else
-			return "Interface\\GroupFrame\\UI-Group-LeaderIcon", 0, 1, 0, 1;
-		end
+		return "Interface\\GroupFrame\\UI-Group-LeaderIcon", 0, 1, 0, 1;
 	else
 		return nil, 0, 1, 0, 1;
 	end

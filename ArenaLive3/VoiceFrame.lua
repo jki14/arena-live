@@ -31,9 +31,9 @@ local addonName, L = ...;
 ]]--
 local VoiceFrame = ArenaLive:ConstructHandler("VoiceFrame", true);
 
-VoiceFrame:RegisterEvent("VOICE_START");
-VoiceFrame:RegisterEvent("VOICE_STOP");
-VoiceFrame:RegisterEvent("MUTELIST_UPDATE");
+--VoiceFrame:RegisterEvent("VOICE_START");
+--VoiceFrame:RegisterEvent("VOICE_STOP");
+--VoiceFrame:RegisterEvent("MUTELIST_UPDATE");
 
 --[[
 ****************************************

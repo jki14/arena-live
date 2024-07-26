@@ -45,11 +45,11 @@ function ALUF_Options:Initialise()
 	ArenaLive:ConstructOptionFrameByHandler(optionFrames["CCSilences"], addonName, "CCIndicator", "Silence");
 	ArenaLive:ConstructOptionFrameByHandler(optionFrames["CCCrowdControls"], addonName, "CCIndicator", "CrowdControl");
 	ArenaLive:ConstructOptionFrameByHandler(optionFrames["CCRoots"], addonName, "CCIndicator", "Root");
-	--ArenaLive:ConstructOptionFrameByHandler(optionFrames["CCDisarms"], addonName, "CCIndicator", "Disarm");
+	ArenaLive:ConstructOptionFrameByHandler(optionFrames["CCDisarms"], addonName, "CCIndicator", "Disarm");
 	ArenaLive:ConstructOptionFrameByHandler(optionFrames["CCOffCDs"], addonName, "CCIndicator", "OffCD");
 	ArenaLive:ConstructOptionFrameByHandler(optionFrames["CCUsefulBuffs"], addonName, "CCIndicator", "UsefulBuff");
 	ArenaLive:ConstructOptionFrameByHandler(optionFrames["CCUsefulDebuffs"], addonName, "CCIndicator", "UsefulDebuff");
-	
+
 end
 
 optionFrames = {
@@ -168,7 +168,7 @@ optionFrames = {
 		["xOffset"] = 0,
 		["yOffset"] = -35,
 	},
-	--[[["CCDisarms"] = {
+	["CCDisarms"] = {
 		["name"] = prefix.."CCDisarms",
 		["parent"] = prefix,
 		["point"] = "TOPLEFT",
@@ -176,7 +176,7 @@ optionFrames = {
 		["relativePoint"] = "BOTTOMLEFT",
 		["xOffset"] = 0,
 		["yOffset"] = -35,
-	},]]
+	},
 	["CCOffCDs"] = {
 		["name"] = prefix.."CCOffCDs",
 		["parent"] = prefix,

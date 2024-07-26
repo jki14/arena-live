@@ -241,18 +241,6 @@
 											</Layer>
 										</Layers>
 									</Frame>
-									<Button name="$parentSpeakerFrame" inherits="VoiceChatSpeakerTemplate" hidden="true">
-										<Size>
-											<AbsDimension x="16" y="16"/>
-										</Size>
-										<Anchors>
-											<Anchor point="TOPLEFT" relativeTo="$parentRoleIcon" relativePoint="TOPRIGHT">
-												<Offset>
-													<AbsDimension x="3" y="0"/>
-												</Offset>
-											</Anchor>
-										</Anchors>
-									</Button>
 								</Frames>
 							</Frame>
 						</Frames>

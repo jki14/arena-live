@@ -101,10 +101,11 @@ local function initFunc(frame)
 	
 	frame:RegisterHandler(_G[prefix.."Name"], "NameText", nil, frame);
 	frame:RegisterHandler(_G[prefix.."Border"], "Border");
-	frame:RegisterHandler(_G[prefix.."HealthBar"], "HealthBar", nil, _G[prefix.."HealthBarHealPredictionBar"], _G[prefix.."HealthBarAbsorbBar"], _G[prefix.."HealthBarAbsorbBarOverlay"], 32, _G[prefix.."HealthBarAbsorbBarFullHPIndicator"], nil, addonName, "PartyFrames");
-		frame:RegisterHandler(_G[prefix.."HealthBarText"], "HealthBarText", nil, frame);
+	--frame:RegisterHandler(_G[prefix.."HealthBar"], "HealthBar", nil, _G[prefix.."HealthBarHealPredictionBar"], _G[prefix.."HealthBarAbsorbBar"], _G[prefix.."HealthBarAbsorbBarOverlay"], 32, _G[prefix.."HealthBarAbsorbBarFullHPIndicator"], nil, addonName, "PartyFrames");
+	frame:RegisterHandler(_G[prefix.."HealthBar"], "HealthBar", nil, nil, _G[prefix.."HealthBarAbsorbBar"], _G[prefix.."HealthBarAbsorbBarOverlay"], 32, _G[prefix.."HealthBarAbsorbBarFullHPIndicator"], nil, addonName, "PartyFrames");
+	frame:RegisterHandler(_G[prefix.."HealthBarText"], "HealthBarText", nil, frame);
 	frame:RegisterHandler(_G[prefix.."PowerBar"], "PowerBar", nil, addonName, "PartyFrames");
-		frame:RegisterHandler(_G[prefix.."PowerBarText"], "PowerBarText", nil, frame);
+	frame:RegisterHandler(_G[prefix.."PowerBarText"], "PowerBarText", nil, frame);
 	frame:RegisterHandler(_G[prefix.."AuraFrame"], "Aura", nil, _G[prefix.."AuraFrameBuffFrame"], _G[prefix.."AuraFrameDebuffFrame"]);
 	frame:RegisterHandler(_G[prefix.."LevelText"], "LevelText", nil , nil, "(%s)");
 	frame:RegisterHandler(_G[prefix.."ReadyCheck"], "ReadyCheck");
@@ -123,8 +124,6 @@ local function initFunc(frame)
 		frame:RegisterHandler(_G[prefix.."MasterLooterIcon"], "MasterLooterIcon", nil, prefix.."IconGroup", nil, addonName, "PartyFrames");
 		frame:RegisterHandler(_G[prefix.."RoleIcon"], "RoleIcon", nil, prefix.."IconGroup", nil, addonName, "PartyFrames");
 
-		frame:RegisterHandler(_G[prefix.."PvPIcon"], "PvPIcon", nil, nil, nil, addonName, "PartyFrames", _G[prefix.."PvPIconTexture"]);
-	
 	-- Update castbar textures:
 	ArenaLiveUnitFrames:UpdateCastBarDisplay(frame);
 	

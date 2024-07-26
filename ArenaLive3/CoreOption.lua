@@ -230,7 +230,7 @@ end
 local DropDownClass = {};
 function DropDownClass:OnClick (button, arg1, arg2)
 	
-	local dropDown = UIDROPDOWNMENU_OPEN_MENU;
+	local dropDown = UIDropDownMenu_GetCurrentDropDown();
 	local valueText = self:GetText();
 	local newValue = self.value;
 	if ( not dropDown.ignore ) then

@@ -316,14 +316,6 @@ function PartyHeader:UpdateAll()
 	end
 end
 
-function PartyHeader:UpdateAllRange()
-	for header in pairs(headers) do
-		if ( header.enabled ) then
-			header:UpdateRange();
-		end
-	end
-end
-
 function PartyHeader:UpdateAnchors(header)
 	if ( not InCombatLockdown() ) then
 		local direction = header:GetAttribute("direction") or "DOWN";
@@ -438,14 +430,6 @@ function PartyHeader:OnUpdate(elapsed)
 	ELAPSED = ELAPSED + elapsed;
 	if ( ELAPSED >= THROTTLE ) then
 		ELAPSED = 0;
-		for i = 1, 4 do
-			local unit = "party"..i;
-			local inRange = ( not UnitExists(unit) or ( UnitInRange(unit) and UnitInPhase(unit) ) );
-			if ( UnitRangeCache[unit] ~= inRange ) then
-				UnitRangeCache[unit] = inRange;
-				self:UpdateAllRange();
-			end
-		end
 	end
 end
 PartyHeader:SetScript("OnUpdate", PartyHeader.OnUpdate);
@@ -537,18 +521,7 @@ function PartyHeaderClass:Update()
 		end
 	end
 end
-function PartyHeaderClass:UpdateRange()
-	for i = 1, NUM_MAX_PARTY_MEMBERS do
-		local frame = self["Frame"..i];
-		local unit = "party"..i;
-		
-		if ( UnitRangeCache[unit] ) then
-			frame:SetAlpha(1);
-		else
-			frame:SetAlpha(0.6);
-		end
-	end
-end
+
 function PartyHeaderClass:Reset()
 	local frame;
 	for i = 1, NUM_MAX_PARTY_MEMBERS do
