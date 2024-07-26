@@ -66,7 +66,7 @@ local optionTemplates =
 local function UpdateDBEntryByOptionFrame(frame, newValue)
 
 	-- Get old DB entry:
-	local oldValue = frame:GetDBValue();
+	local oldValue = frame:GetDBValue() or 0;
 		
 	-- Set the new variable value in DB:
 	frame:SetDBValue(newValue);	
@@ -137,13 +137,13 @@ function OptionBaseClass:UpdateShownValue()
 	self.ignore = true;
 
 	if ( self.type == "CheckButton" ) then
-		self:SetChecked(self:GetDBValue());
+		self:SetChecked(self:GetDBValue() or 0);
 	elseif ( self.type == "ColourPicker" ) then
 		local red, green, blue, alpha = self:GetDBValue();
-		self.colour:SetTexture(red, green, blue, alpha or 1);
+		self.colour:SetTexture(red or 1, green or 1, blue or 1, alpha or 1);
 	elseif ( ( self.type == "DropDown" or self.type == "DropDownLargeTitle" ) and self.info ) then
 		local text;
-		local value = self:GetDBValue();
+		local value = self:GetDBValue() or 0;
 		for key, infoData in ipairs(self.info) do
 			if ( infoData["value"] == value and ( not self.ignoreKey or not self.ignoreKey[key] ) ) then
 				text = infoData["text"];
@@ -155,8 +155,8 @@ function OptionBaseClass:UpdateShownValue()
 		self:SetText(self:GetDBValue() or "");
 		self:SetCursorPosition(0);
 	elseif ( self.type == "Slider" ) then
-		self:SetValue(self:GetDBValue());
-		self.curBox:SetText(self:GetDBValue());
+		self:SetValue(self:GetDBValue() or 0);
+		self.curBox:SetText(self:GetDBValue() or "");
 		self.curBox:SetCursorPosition(0);
 	end
 	
@@ -208,7 +208,7 @@ local ColourPickerClass = {};
 function ColourPickerClass:OnClick()
 
 	local red, green, blue, alpha = self:GetDBValue();
-	ColorPickerFrame.previousValues = {red, green, blue, alpha};
+	ColorPickerFrame.previousValues = {red or 1, green or 1, blue or 1, alpha or 1};
 	ColorPickerFrame:SetColorRGB(red, green, blue);
 	ColorPickerFrame.func = ColourPickerButton_Update;
 	ColorPickerFrame.opacityFunc = ColourPickerButton_Update;
@@ -249,7 +249,7 @@ end
 local info = {};
 function DropDownClass:Refresh(level, menuList)
 	
-	local dbValue = self:GetDBValue();
+	local dbValue = self:GetDBValue() or 0;
 	for key, infoData in ipairs(self.info) do
 		-- You can filter certain values for a dropdown via the self.ignoreKey table.
 		if ( not self.ignoreKey or not self.ignoreKey[key] ) then
@@ -306,7 +306,7 @@ function EditBoxClass:OnEditFocusLost()
 
 			-- Check if we got a valid number value:
 			if ( not newValue ) then
-				newValue = self:GetDBValue(); -- Reset to old value
+				newValue = self:GetDBValue() or 0; -- Reset to old value
 			end
 			
 			-- Adjust edit box value to number value:
@@ -532,7 +532,7 @@ local function ConstructCheckButton (checkButton, title)
 	
 	-- Set title and initial value:
 	fontString:SetText(title);
-	checkButton:SetChecked(checkButton:GetDBValue());
+	checkButton:SetChecked(checkButton:GetDBValue() or 0);
 	
 	-- Add methods:
 	ArenaLive:CopyClassMethods(CheckButtonClass, checkButton);
@@ -554,7 +554,7 @@ local function ConstructColourPicker (colourPicker, title)
 	
 	-- Set initial colour:
 	local red, green, blue, alpha = colourPicker:GetDBValue();
-	colourPicker.colour:SetTexture(red, green, blue, alpha or 1);
+	colourPicker.colour:SetTexture(red or 1, green or 1, blue or 1, alpha or 1);
 	
 	-- Add methods:
 	ArenaLive:CopyClassMethods(ColourPickerClass, colourPicker);
@@ -649,13 +649,13 @@ local function ConstructSlider (slider, title, inputType, minValue, maxValue, va
 	slider.curBox:SetJustifyH("CENTER");
 	-- Set Values:
 	slider:SetMinMaxValues(minValue, maxValue);
-	slider:SetValue(slider:GetDBValue());
+	slider:SetValue(slider:GetDBValue() or 0);
 	
 	-- Set texts:
 	slider.title:SetText(title);
 	slider.minText:SetText(minValue);
 	slider.maxText:SetText(maxValue);
-	slider.curBox:SetText(slider:GetDBValue());
+	slider.curBox:SetText(slider:GetDBValue() or "");
 	slider.curBox:SetCursorPosition(0);
 	
 	-- Set edit box size:
