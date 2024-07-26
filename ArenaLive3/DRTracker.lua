@@ -142,8 +142,8 @@ function DRTracker:Update(unitFrame)
 				else
 					icon.text:Hide();
 				end
-				icon.text:SetTextColor(red, green, blue);
-				icon.cooldown.text:SetTextColor(red, green, blue);
+				icon.text:SetTextColor(red, green, blue, 1);
+				icon.cooldown.text:SetTextColor(red, green, blue, 1);
 				icon.border:SetVertexColor(red, green, blue);
 				icon.texture:SetTexture(texture or "Interface\\Icons\\INV_Misc_QuestionMark");
 				icon.cooldown:Set(GetTime(), DIMINISHING_RETURN_DURATION);
@@ -314,16 +314,16 @@ function DRTracker:UpdateIconDRColour(icon, guid)
 	-- Colour the cooldown text according to the DR stacks:
 	local stack = DRCache[guid][id]["drMultiplier"];
 	if ( stack == 0.5 ) then
-		icon.text:SetTextColor(0, 1, 0);
-		icon.cooldown.text:SetTextColor(0, 1, 0);
+		icon.text:SetTextColor(0, 1, 0, 1);
+		icon.cooldown.text:SetTextColor(0, 1, 0, 1);
 		icon.border:SetVertexColor(0, 1, 0);
 	elseif ( stack == 0.25 ) then
-		icon.text:SetTextColor(1, 1, 0);
-		icon.cooldown.text:SetTextColor(1, 1, 0);
+		icon.text:SetTextColor(1, 1, 0, 1);
+		icon.cooldown.text:SetTextColor(1, 1, 0, 1);
 		icon.border:SetVertexColor(1, 1, 0);
 	elseif ( stack == 0 ) then
-		icon.text:SetTextColor(1, 0, 0);
-		icon.cooldown.text:SetTextColor(1, 0, 0);
+		icon.text:SetTextColor(1, 0, 0, 1);
+		icon.cooldown.text:SetTextColor(1, 0, 0, 1);
 		icon.border:SetVertexColor(1, 0, 0);
 	end
 

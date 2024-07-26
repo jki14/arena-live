@@ -123,7 +123,7 @@ function LevelText:Update (unitFrame)
 		end
 	end
 
-	levelText:SetTextColor(red, green, blue);
+	levelText:SetTextColor(red, green, blue, 1);
 	
 	-- Apply the text template if there is one:
 	if ( levelText.formatText ) then

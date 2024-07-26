@@ -154,7 +154,7 @@ function NameText:SetColour(unitFrame)
 		end
 	end
 	
-	nameText:SetTextColor(red, green, blue);	
+	nameText:SetTextColor(red, green, blue, 1);
 end
 
 function NameText:SetTextObject(unitFrame)

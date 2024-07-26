@@ -347,7 +347,7 @@ end
 
 function EditBoxClass:Enable()
 	self.enabled = true;
-	self:SetTextColor(1, 1, 1);
+	self:SetTextColor(1, 1, 1, 1);
 	self:SetScript("OnEditFocusGained", nil);
 end
 

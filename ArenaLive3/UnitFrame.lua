@@ -444,7 +444,7 @@ function UnitFrameClass:OnEnter ()
 			GameTooltip_SetDefaultAnchor(GameTooltip, self);
 			GameTooltip:SetUnit(self.unit, self.hideStatusOnTooltip)
 			local r, g, b = GameTooltip_UnitColor(self.unit);
-			GameTooltipTextLeft1:SetTextColor(r, g, b);
+			GameTooltipTextLeft1:SetTextColor(r, g, b, 1);
 			GameTooltip:Show();
 		end		
 	end
